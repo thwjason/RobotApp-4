@@ -26,23 +26,34 @@
   };
 
   function renderAll() {
+/*  Jason: I don't think I understand functions. I am also not sure what is the difference between inserting something in
+() and otherwise. Also, does "render" mean anything at all*/
     board.reverse();
+// Same comments here regarding ()
     const root = document.getElementById('root');
+// Unsure why "document"
     root.innerHTML = '';
+// Is innerHTML a sort of "reserved" value?
     renderToolbar(root);
     renderBoardContainer(root);
     renderBoard();
   }
 
   function renderToolbar(root) {
+// Why is there now "root" in ()
     const toolbar = document.createElement('div');
     root.appendChild(toolbar);
     toolbar.setAttribute('id', 'toolbar');
+// what is setAttribute? Does this result in <div id="toolbar"> </div>?
 
     const turnLeftButton = document.createElement('button');
     turnLeftButton.innerHTML = 'TURN-LEFT';
     turnLeftButton.addEventListener('click', function () {
       turn('left');
+/* I think that addEventListener is an instruction to the computer to look for this event, in this case, "click". 
+But this is a string here, does that translate to a mouse-click?
+What is then the the point of function (), and then does the "turn("left")" tie back into the function near the bottom?
+If so, does it actually matter whether the function is above or below?  */
     });
     toolbar.appendChild(turnLeftButton);
 
@@ -69,15 +80,23 @@
 
   function renderBoard() {
     console.log('rendering');
+  // why? I think the result of the console.log is just so that it prints this.
     const elem = document.getElementById('board');
     elem.innerHTML = '';
+  // Why the blank?
 
     board[robot.y][robot.x] = 'R' + trailIndicators[robot.dir];
+  // I don't understand board[robot.y][robot.x].
 
     const table = document.createElement('table');
     elem.appendChild(table);
     for (let row = board.length - 1; row >= 0; row--) {
+  /* I understand that here you want the row to be board.length -1 because the board is 4x4; you want -1 because it starts
+  from 0-3, so you want 4-1. I also understand "row >=0, row--" which means that as long as row is greater or = 0,
+  subtract one. Subtract one from what, though? Board length?*/
+
       const cells = board[row];
+  // Why is row in []?
       const tr = document.createElement('tr');
       table.appendChild(tr);
       let rowHtml = '';
