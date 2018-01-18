@@ -26,31 +26,31 @@
   };
 
   function renderAll() {
-    /*  [18/1/18: RESOLVED] Jason: I don't think I understand functions. I am also not sure what is the difference between inserting something in
+    /*  zJason: I don't think I understand functions. I am also not sure what is the difference between inserting something in
     () and otherwise. Also, does "render" mean anything at all*/
     board.reverse();
-    // [18/1/18: RESOLVED] Same comments here regarding ()
+    // Same comments here regarding ()
     const root = document.getElementById('root');
-    // [18/1/18: RESOLVED] Unsure why "document"
+    // Unsure why "document"
     root.innerHTML = '';
-    // This was not answered. Is innerHTML a sort of "reserved" value? Why is it defined to be blank?
+    // Is innerHTML a sort of "reserved" value?
     renderToolbar(root);
     renderBoardContainer(root);
     renderBoard();
   }
 
   function renderToolbar(root) {
-    // [18/1/18: RESOLVED] Why is there now "root" in ()
+    // Why is there now "root" in ()
     const toolbar = document.createElement('div');
     root.appendChild(toolbar);
     toolbar.setAttribute('id', 'toolbar');
-    // [18/1/18: RESOLVED] what is setAttribute? Does this result in <div id="toolbar"> </div>?
+    // what is setAttribute? Does this result in <div id="toolbar"> </div>?
 
     const turnLeftButton = document.createElement('button');
     turnLeftButton.innerHTML = 'TURN-LEFT';
     turnLeftButton.addEventListener('click', function () {
       turn('left');
-      /* [18/1/18: RESOLVED] I think that addEventListener is an instruction to the computer to look for this event, in this case, "click".
+      /* I think that addEventListener is an instruction to the computer to look for this event, in this case, "click". 
       But this is a string here, does that translate to a mouse-click?
       What is then the the point of function (), and then does the "turn("left")" tie back into the function near the bottom?
       If so, does it actually matter whether the function is above or below?  */
@@ -80,13 +80,13 @@
 
   function renderBoard() {
     console.log('rendering');
-    // [18/1/18: RESOLVED] why? I think the result of the console.log is just so that it prints this.
+    // why? I think the result of the console.log is just so that it prints this.
     const elem = document.getElementById('board');
     elem.innerHTML = '';
-    // NOT resolved: Why the blank?
+    // Why the blank?
 
     board[robot.y][robot.x] = 'R' + trailIndicators[robot.dir];
-    // [18/1/18: RESOLVED]I don't understand board[robot.y][robot.x].
+    // I don't understand board[robot.y][robot.x].
 
     const table = document.createElement('table');
     elem.appendChild(table);
@@ -96,10 +96,12 @@
       subtract one. Subtract one from what, though? Board length?*/
 
       const cells = board[row];
-      // [18/1/18: RESOLVED] Why is row in []?
+      // Why is row in []?
       const tr = document.createElement('tr');
       table.appendChild(tr);
       let rowHtml = '';
+      /*Can you confirm my understanding here that '' is so that you clear the array first, then start adding elements
+        from the array of arrays which is the board back into this ? */
       for (let col = 0; col < cells.length; col++) {
         const cell = cells[col] === '.' ? '' : cells[col];
         rowHtml += `<td>${cell}</td>`;
@@ -113,92 +115,126 @@
     let x = robot.x;
     let y = robot.y;
 
-    /* Replacing the following ternary code with if/else/then statements :
+    /*changing these ternary operators to if/else statements: 
+    switch (robot.dir) {
+        case 'up':
+         y = y < board.length - 1 ? y + 1 : y;
+         break;
+       case 'down':
+         y = y > 0 ? y - 1 : y;
+         break;
+       case 'left':
+         x = x > 0 ? x - 1 : x;
+         break;
+       case 'right':
+         x = x < board[0].length - 1 ? x + 1 : x;
+         break;
+     } */
+
+    // Solution:
     switch (robot.dir) {
       case 'up':
-        y = y < board.length - 1 ? y + 1 : y;
-        break;
-      case 'down':
-        y = y > 0 ? y - 1 : y;
-        break;
-      case 'left':
-        x = x > 0 ? x - 1 : x;
-        break;
-      case 'right':
-        x = x < board[0].length - 1 ? x + 1 : x;
-        break;
-    }
-   */
-    // Answer:
-    const direction = robot.dir;
-    if (y < board.length - 1) {
-      y = y + 1; // or y += 1;
-    }
-    if (y > 0) {
-      y = y - 1; // or y -= 1;
-    }
-    if (x < board[0].length - 1) {
-      // x = x + 1; or x += 1
-    }
-    if (x > 0) {
-      x = x - 1;
-    }
-    // End of answer.
-
-    const cell = board[y][x];
-
-    if (cell === '.' || cell === 'F' || cell === 'A') {
-      board[robot.y][robot.x] = trailIndicators[robot.dir];
-      robot.x = x;
-      robot.y = y;
-      if (cell === 'F') {
-        console.log(`flag reached in ${moves} moves and ${turns} turns`);
-        if (applesEaten > 0) {
-          console.log('total apples eaten: ' + applesEaten);
+        if (y < board.length - 1) {
+          y += 1; // or y = y +1; or y = y++; and so on for the rest of the cases.
         }
-      } else if (cell === 'A') {
-        applesEaten += 1;
-        console.log('apple eaten: YUM');
-      }
-    } else {
-      console.log('move blocked by obstacle');
-    }
-
-    moves += 1;
-    renderBoard();
-  }
-
-  function turn(turnDirection) {
-    if (turnDirection !== 'left' && turnDirection !== 'right') {
-      console.log('ignoring invalid turn', turnDirection);
-      return;
-    }
-
-    console.log('executing turn()');
-
-    switch (robot.dir) {
-      case 'up':
-        robot.dir = turnDirection === 'left' ? 'left' : 'right';
         break;
       case 'down':
-        robot.dir = turnDirection === 'left' ? 'right' : 'left';
+        if (y > 0) {
+          y -= 1;
+        }
         break;
       case 'left':
-        robot.dir = turnDirection === 'left' ? 'down' : 'up';
+        if (x > 0) {
+          x -= 1;
+        }
         break;
       case 'right':
-        robot.dir = turnDirection === 'left' ? 'up' : 'down';
+        if (x < board[0].length - 1) {
+          x += 1;
+        }
         break;
+        const cell = board[y][x];
+
+        if (cell === '.' || cell === 'F' || cell === 'A') {
+          board[robot.y][robot.x] = trailIndicators[robot.dir];
+          robot.x = x;
+          robot.y = y;
+          if (cell === 'F') {
+            console.log(`flag reached in ${moves} moves and ${turns} turns`);
+            if (applesEaten > 0) {
+              console.log('total apples eaten: ' + applesEaten);
+            }
+          } else if (cell === 'A') {
+            applesEaten += 1;
+            console.log('apple eaten: YUM');
+          }
+        } else {
+          console.log('move blocked by obstacle');
+        }
+
+        moves += 1;
+        renderBoard();
     }
 
-    //Answer:  
-    if (direction === "up") {
-      "turnLeft";
-    }
+    function turn(turnDirection) {
+      if (turnDirection !== 'left' && turnDirection !== 'right') {
+        console.log('ignoring invalid turn', turnDirection);
+        return;
+      }
 
-    turns += 1;
-    renderBoard();
+      console.log('executing turn()');
+
+      /* changing the following code into if/else statements.
+      switch (robot.dir) {
+        case 'up':
+          robot.dir = turnDirection === 'left' ? 'left' : 'right';
+          break;
+        case 'down':
+          robot.dir = turnDirection === 'left' ? 'right' : 'left';
+          break;
+        case 'left':
+          robot.dir = turnDirection === 'left' ? 'down' : 'up';
+          break;
+        case 'right':
+          robot.dir = turnDirection === 'left' ? 'up' : 'down';
+          break;
+      } */
+
+      switch (robot.dir) {
+        case 'up':
+          if (turnDirection === 'left') {
+            robot.dir = 'left';
+          } else {
+            robot.dir = 'right';
+          }
+          break;
+        case 'down':
+          if (turnDirection === 'left') {
+            robot.dir = 'right';
+          } else {
+            robot.dir = 'left';
+          }
+          break;
+        case 'left':
+          if (turnDirection === 'left') {
+            robot.dir = 'down';
+          } else {
+            robot.dir = 'up';
+          }
+          break;
+        case 'right':
+          if (turnDirection === 'left') {
+            robot.dir = 'up';
+          } else {
+            robot.dir = 'down';
+          }
+          break;
+
+          turns += 1;
+          renderBoard();
+      }
+
+      renderAll();
+    }) ();
   }
-
-  renderAll();
-})();
+}
