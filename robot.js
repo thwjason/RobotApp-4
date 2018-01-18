@@ -26,34 +26,34 @@
   };
 
   function renderAll() {
-/*  Jason: I don't think I understand functions. I am also not sure what is the difference between inserting something in
-() and otherwise. Also, does "render" mean anything at all*/
+    /*  [18/1/18: RESOLVED] Jason: I don't think I understand functions. I am also not sure what is the difference between inserting something in
+    () and otherwise. Also, does "render" mean anything at all*/
     board.reverse();
-// Same comments here regarding ()
+    // [18/1/18: RESOLVED] Same comments here regarding ()
     const root = document.getElementById('root');
-// Unsure why "document"
+    // [18/1/18: RESOLVED] Unsure why "document"
     root.innerHTML = '';
-// Is innerHTML a sort of "reserved" value?
+    // This was not answered. Is innerHTML a sort of "reserved" value? Why is it defined to be blank?
     renderToolbar(root);
     renderBoardContainer(root);
     renderBoard();
   }
 
   function renderToolbar(root) {
-// Why is there now "root" in ()
+    // [18/1/18: RESOLVED] Why is there now "root" in ()
     const toolbar = document.createElement('div');
     root.appendChild(toolbar);
     toolbar.setAttribute('id', 'toolbar');
-// what is setAttribute? Does this result in <div id="toolbar"> </div>?
+    // [18/1/18: RESOLVED] what is setAttribute? Does this result in <div id="toolbar"> </div>?
 
     const turnLeftButton = document.createElement('button');
     turnLeftButton.innerHTML = 'TURN-LEFT';
     turnLeftButton.addEventListener('click', function () {
       turn('left');
-/* I think that addEventListener is an instruction to the computer to look for this event, in this case, "click". 
-But this is a string here, does that translate to a mouse-click?
-What is then the the point of function (), and then does the "turn("left")" tie back into the function near the bottom?
-If so, does it actually matter whether the function is above or below?  */
+      /* [18/1/18: RESOLVED] I think that addEventListener is an instruction to the computer to look for this event, in this case, "click".
+      But this is a string here, does that translate to a mouse-click?
+      What is then the the point of function (), and then does the "turn("left")" tie back into the function near the bottom?
+      If so, does it actually matter whether the function is above or below?  */
     });
     toolbar.appendChild(turnLeftButton);
 
@@ -80,23 +80,23 @@ If so, does it actually matter whether the function is above or below?  */
 
   function renderBoard() {
     console.log('rendering');
-  // why? I think the result of the console.log is just so that it prints this.
+    // [18/1/18: RESOLVED] why? I think the result of the console.log is just so that it prints this.
     const elem = document.getElementById('board');
     elem.innerHTML = '';
-  // Why the blank?
+    // NOT resolved: Why the blank?
 
     board[robot.y][robot.x] = 'R' + trailIndicators[robot.dir];
-  // I don't understand board[robot.y][robot.x].
+    // [18/1/18: RESOLVED]I don't understand board[robot.y][robot.x].
 
     const table = document.createElement('table');
     elem.appendChild(table);
     for (let row = board.length - 1; row >= 0; row--) {
-  /* I understand that here you want the row to be board.length -1 because the board is 4x4; you want -1 because it starts
-  from 0-3, so you want 4-1. I also understand "row >=0, row--" which means that as long as row is greater or = 0,
-  subtract one. Subtract one from what, though? Board length?*/
+      /* I understand that here you want the row to be board.length -1 because the board is 4x4; you want -1 because it starts
+      from 0-3, so you want 4-1. I also understand "row >=0, row--" which means that as long as row is greater or = 0,
+      subtract one. Subtract one from what, though? Board length?*/
 
       const cells = board[row];
-  // Why is row in []?
+      // [18/1/18: RESOLVED] Why is row in []?
       const tr = document.createElement('tr');
       table.appendChild(tr);
       let rowHtml = '';
@@ -113,6 +113,7 @@ If so, does it actually matter whether the function is above or below?  */
     let x = robot.x;
     let y = robot.y;
 
+    /* Replacing the following ternary code with if/else/then statements :
     switch (robot.dir) {
       case 'up':
         y = y < board.length - 1 ? y + 1 : y;
@@ -127,6 +128,22 @@ If so, does it actually matter whether the function is above or below?  */
         x = x < board[0].length - 1 ? x + 1 : x;
         break;
     }
+   */
+    // Answer:
+    const direction = robot.dir;
+    if (y < board.length - 1) {
+      y = y + 1; // or y += 1;
+    }
+    if (y > 0) {
+      y = y - 1; // or y -= 1;
+    }
+    if (x < board[0].length - 1) {
+      // x = x + 1; or x += 1
+    }
+    if (x > 0) {
+      x = x - 1;
+    }
+    // End of answer.
 
     const cell = board[y][x];
 
@@ -172,6 +189,11 @@ If so, does it actually matter whether the function is above or below?  */
       case 'right':
         robot.dir = turnDirection === 'left' ? 'up' : 'down';
         break;
+    }
+
+    //Answer:  
+    if (direction === "up") {
+      "turnLeft";
     }
 
     turns += 1;
