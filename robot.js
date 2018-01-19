@@ -153,6 +153,7 @@
           x += 1;
         }
         break;
+    }
         const cell = board[y][x];
 
         if (cell === '.' || cell === 'F' || cell === 'A') {
@@ -229,12 +230,11 @@
             robot.dir = 'down';
           }
           break;
-
+      }
           turns += 1;
           renderBoard();
       }
 
       renderAll();
     }) ();
-  }
-}
+
